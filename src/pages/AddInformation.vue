@@ -1,9 +1,20 @@
 <template>
   <div>
     <form class="form" v-on:submit.prevent="submitHandler">
-      <InputVue minlength = 5 ref="userName" type="text" placeholder = 'user name'/>
-      <InputVue minLength = 5 ref="email" type="email" placeholder = 'email' />
-      <InputVue minlength = 8 ref="password" type="password"  placeholder = 'password'/>
+      <InputVue
+        minlength="5"
+        ref="userName"
+        type="text"
+        placeholder="user name"
+      />
+      {{ counter }}
+      <InputVue minLength="5" ref="email" type="email" placeholder="email" />
+      <InputVue
+        minlength="8"
+        ref="password"
+        type="password"
+        placeholder="password"
+      />
 
       <input type="submit" />
     </form>
@@ -11,16 +22,18 @@
 </template>
 
 <script>
-import InputVue from "@/components/Input.vue";
-import axios from "axios";
+// import { store } from "../store/store";
 export default {
-  components: { InputVue },
   data: function () {
     return {
       isFormValid: false,
     };
   },
-
+  computed: {
+    counter() {
+      return this.$store.state.counter;
+    },
+  },
   methods: {
     submitHandler() {
       const ref = this.$refs;
@@ -28,7 +41,7 @@ export default {
       const email = ref.email.isInputValid;
       const password = ref.password.isInputValid;
       if (userName && email && password) {
-        axios
+        this.$http
           .post("http://localhost:3000/users", {
             password: ref.password.name,
             userName: ref.userName.name,
